@@ -53,6 +53,7 @@
             text-align: center;
             margin: 40px 0;
             z-index: 2;
+            padding: 0 10px;
         }
         h1 {
             font-family: 'Cinzel Decorative', cursive;
@@ -87,7 +88,9 @@
             width: var(--card-width);
             height: var(--card-height);
             perspective: 1500px;
-            cursor: pointer; /* Mouse ikonu el işareti olsun */
+            cursor: pointer;
+            /* Mobilde dokunma gecikmesini önler */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         .card {
@@ -100,11 +103,8 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
 
-        /* GÜNCELLEME: BURADAKİ HOVER EFEKTİ ARTIK KARTI DÖNDÜRÜYOR.
-           Mouse üstüne gelince (.card-wrapper:hover) kart döner (rotateY 180deg).
-           Aynı zamanda hafifçe yukarı kalkar (translateY -15px) ki o "havalanma" hissi kaybolmasın.
-        */
-        .card-wrapper:hover .card {
+        /* DEĞİŞİKLİK: Hover yerine .is-flipped sınıfı eklendiğinde dönecek */
+        .card.is-flipped {
             transform: rotateY(180deg) translateY(-15px);
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
@@ -215,6 +215,12 @@
             filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
         }
 
+        /* Mobil için başlık boyutunu biraz küçültelim */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5em; }
+            .grid-container { gap: 30px; }
+        }
+
     </style>
 </head>
 <body>
@@ -231,7 +237,7 @@
 
     <header>
         <h1>Yeni Yıl Dilekleri</h1>
-        <p>Kartın Üzerine Gel ve Büyüyü Hisset</p>
+        <p>Karta Dokun ve Büyüyü Hisset</p>
     </header>
 
     <div class="grid-container">
@@ -359,7 +365,7 @@
     </div>
 
     <script>
-        // JS artık sadece Kar Yağışı için var. Tıklama fonksiyonu CSS hover ile değiştirildiği için kaldırıldı.
+        // Kar Yağışı Efekti
         function createSnow() {
             const snow = document.createElement('div');
             snow.innerHTML = '❄';
@@ -374,6 +380,19 @@
             setTimeout(() => { snow.remove(); }, duration * 1000);
         }
         setInterval(createSnow, 100);
+
+        // KART ÇEVİRME İŞLEMİ (MOBİL UYUMLU - TIKLAMA İLE)
+        // Bütün kart kapsayıcılarını seçiyoruz
+        const wrappers = document.querySelectorAll('.card-wrapper');
+
+        wrappers.forEach(wrapper => {
+            wrapper.addEventListener('click', () => {
+                // Tıklanan kapsayıcının içindeki 'card' öğesini bul
+                const card = wrapper.querySelector('.card');
+                // 'is-flipped' sınıfını ekle veya çıkar (toggle)
+                card.classList.toggle('is-flipped');
+            });
+        });
     </script>
 </body>
 </html>
