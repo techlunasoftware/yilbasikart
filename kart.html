@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Yılbaşı Kartları</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --card-width: 240px;
+            --card-height: 350px;
+            /* Gerçekçi Altın Rengi Gradyanı */
+            --gold-gradient: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            /* Kadife Kırmızısı */
+            --velvet-red: radial-gradient(circle at 30% 30%, #961c1e, #680d0e, #3a0303);
+            /* Zümrüt Yeşili (Kadife) */
+            --velvet-green: radial-gradient(circle at 30% 30%, #1e5945, #11382b, #061f16);
+            /* Kağıt Rengi */
+            --paper-color: #fdfbf7;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #1b2735 0%, #090a0f 100%);
+            font-family: 'Cormorant Garamond', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            padding-bottom: 50px;
+        }
+
+        /* --- Kar Efekti --- */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            text-shadow: 0 0 5px #000;
+            z-index: 9999;
+            user-select: none;
+            pointer-events: none;
+            animation-name: snowfall;
+            animation-timing-function: linear;
+        }
+        @keyframes snowfall {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0.3; }
+        }
+
+        /* --- Başlık --- */
+        header {
+            text-align: center;
+            margin: 40px 0;
+            z-index: 2;
+        }
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 3.5em;
+            margin: 0;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        p { 
+            color: #ccc; 
+            font-size: 1.2em; 
+            margin-top: 10px; 
+            letter-spacing: 1px;
+            font-style: italic;
+        }
+
+        /* --- Grid --- */
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            z-index: 2;
+            padding: 20px;
+        }
+
+        /* --- Kart Yapısı --- */
+        .card-wrapper {
+            width: var(--card-width);
+            height: var(--card-height);
+            perspective: 1500px;
+            cursor: pointer; /* Mouse ikonu el işareti olsun */
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+
+        /* GÜNCELLEME: BURADAKİ HOVER EFEKTİ ARTIK KARTI DÖNDÜRÜYOR.
+           Mouse üstüne gelince (.card-wrapper:hover) kart döner (rotateY 180deg).
+           Aynı zamanda hafifçe yukarı kalkar (translateY -15px) ki o "havalanma" hissi kaybolmasın.
+        */
+        .card-wrapper:hover .card {
+            transform: rotateY(180deg) translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+
+        /* --- Yüzler (Genel) --- */
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* --- ÖN YÜZ --- */
+        .face.front {
+            background: var(--velvet-red);
+            border: 8px solid transparent;
+            border-image: var(--gold-gradient);
+            border-image-slice: 1;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.7);
+        }
+
+        .face.front.green-theme {
+            background: var(--velvet-green);
+        }
+
+        .face.front::after {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px solid #b38728;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+            pointer-events: none;
+        }
+
+        .tree-icon {
+            width: 130px;
+            height: 130px;
+            margin-bottom: 20px;
+            fill: url(#goldGradientDef);
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.6));
+        }
+
+        .tree-icon path { fill: #e6c200; }
+
+        .card-label {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2.2em;
+            line-height: 1.2;
+            margin-top: 5px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.8));
+        }
+
+        .click-hint {
+            font-size: 0.9em;
+            margin-top: auto;
+            color: #d4af37;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        /* --- ARKA YÜZ --- */
+        .face.back {
+            background-color: var(--paper-color);
+            color: #2c3e50;
+            transform: rotateY(180deg);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        .wish-title {
+            font-family: 'Cinzel Decorative', cursive;
+            color: #8a1c1e;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+            width: 80%;
+        }
+
+        .wish-text {
+            font-size: 1.3em;
+            line-height: 1.6;
+            font-style: italic;
+            color: #4a4a4a;
+        }
+
+        .gift-icon {
+            font-size: 2.5em;
+            margin-top: 20px;
+            opacity: 0.8;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+        }
+
+    </style>
+</head>
+<body>
+
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <linearGradient id="goldGradientDef" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#bf953f;stop-opacity:1" />
+            <stop offset="25%" style="stop-color:#fcf6ba;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#b38728;stop-opacity:1" />
+            <stop offset="75%" style="stop-color:#fbf5b7;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#aa771c;stop-opacity:1" />
+        </linearGradient>
+    </svg>
+
+    <header>
+        <h1>Yeni Yıl Dilekleri</h1>
+        <p>Kartın Üzerine Gel ve Büyüyü Hisset</p>
+    </header>
+
+    <div class="grid-container">
+
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="face front">
+                    <svg class="tree-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.3 380.6C428 359.6 412.8 340.4 394.4 323.6L417.9 293.2C425.1 283.9 426.4 271.3 421.3 260.8C416.1 250.2 405.6 243.6 393.9 243.6H312.4L349.2 175.8C355.4 164.4 353.8 150.3 344.9 140.6C336.1 130.9 322 127.6 309.8 132.5L256 154L202.2 132.5C190 127.6 175.9 130.9 167.1 140.6C158.2 150.3 156.6 164.4 162.8 175.8L199.6 243.6H118.1C106.4 243.6 95.89 250.2 90.74 260.8C85.59 271.3 86.94 283.9 94.11 293.2L117.6 323.6C99.2 340.4 83.97 359.6 72.67 380.6C66.51 392 68.12 406.1 77.03 415.8C85.93 425.5 100 428.8 112.2 423.9L224 379.2V472H184C170.7 472 160 482.7 160 496C160 509.3 170.7 520 184 520H328C341.3 520 352 509.3 352 496C352 482.7 341.3 472 328 472H288V379.2L399.8 423.9C412 428.8 426.1 425.5 434.1 415.8C443.9 406.1 445.5 392 439.3 380.6zM256 103.1C274.2 77.28 303.8 59.98 334.1 51.85C347 48.38 354.7 35.07 351.3 22.14C347.8 9.206 334.5 1.529 321.6 4.995C283.5 15.22 246.9 36.62 224 68.52C201.1 36.62 164.5 15.22 126.4 4.995C113.5 1.529 100.2 9.206 96.7 22.14C93.23 35.07 100.1 48.38 113.9 51.85C144.2 59.98 173.8 77.28 192 103.1V132.5L256 158.1L320 132.5V103.1H256z" style="fill:url(#goldGradientDef);"/></svg>
+                    <div class="card-label">Yılbaşı<br>Kartı</div>
+                    <div class="click-hint">GİZEMİ ÇÖZ</div>
+                </div>
+                <div class="face back">
+                    <div class="wish-title">Sağlık</div>
+                    <div class="wish-text">"Yeni yılda bedenine güç, ruhuna şifa dilerim. Her nefesin huzur, her adımın sağlık olsun."</div>
+                    <div class="gift-icon">❤️‍🩹</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="face front green-theme">
+                    <svg class="tree-icon" viewBox="0 0 512 512"><path d="M439.3 380.6C428 359.6 412.8 340.4 394.4 323.6L417.9 293.2C425.1 283.9 426.4 271.3 421.3 260.8C416.1 250.2 405.6 243.6 393.9 243.6H312.4L349.2 175.8C355.4 164.4 353.8 150.3 344.9 140.6C336.1 130.9 322 127.6 309.8 132.5L256 154L202.2 132.5C190 127.6 175.9 130.9 167.1 140.6C158.2 150.3 156.6 164.4 162.8 175.8L199.6 243.6H118.1C106.4 243.6 95.89 250.2 90.74 260.8C85.59 271.3 86.94 283.9 94.11 293.2L117.6 323.6C99.2 340.4 83.97 359.6 72.67 380.6C66.51 392 68.12 406.1 77.03 415.8C85.93 425.5 100 428.8 112.2 423.9L224 379.2V472H184C170.7 472 160 482.7 160 496C160 509.3 170.7 520 184 520H328C341.3 520 352 509.3 352 496C352 482.7 341.3 472 328 472H288V379.2L399.8 423.9C412 428.8 426.1 425.5 434.1 415.8C443.9 406.1 445.5 392 439.3 380.6zM256 103.1C274.2 77.28 303.8 59.98 334.1 51.85C347 48.38 354.7 35.07 351.3 22.14C347.8 9.206 334.5 1.529 321.6 4.995C283.5 15.22 246.9 36.62 224 68.52C201.1 36.62 164.5 15.22 126.4 4.995C113.5 1.529 100.2 9.206 96.7 22.14C93.23 35.07 100.1 48.38 113.9 51.85C144.2 59.98 173.8 77.28 192 103.1V132.5L256 158.1L320 132.5V103.1H256z" style="fill:url(#goldGradientDef);"/></svg>
+                    <div class="card-label">Yılbaşı<br>Kartı</div>
+                    <div class="click-hint">GİZEMİ ÇÖZ</div>
+                </div>
+                <div class="face back">
+                    <div class="wish-title">Şans</div>
+                    <div class="wish-text">"Talih kuşu bu yıl omzundan inmesin. Kapılar kendiliğinden açılsın, mucizeler seni bulsun."</div>
+                    <div class="gift-icon">🍀</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="face front">
+                    <svg class="tree-icon" viewBox="0 0 512 512"><path d="M439.3 380.6C428 359.6 412.8 340.4 394.4 323.6L417.9 293.2C425.1 283.9 426.4 271.3 421.3 260.8C416.1 250.2 405.6 243.6 393.9 243.6H312.4L349.2 175.8C355.4 164.4 353.8 150.3 344.9 140.6C336.1 130.9 322 127.6 309.8 132.5L256 154L202.2 132.5C190 127.6 175.9 130.9 167.1 140.6C158.2 150.3 156.6 164.4 162.8 175.8L199.6 243.6H118.1C106.4 243.6 95.89 250.2 90.74 260.8C85.59 271.3 86.94 283.9 94.11 293.2L117.6 323.6C99.2 340.4 83.97 359.6 72.67 380.6C66.51 392 68.12 406.1 77.03 415.8C85.93 425.5 100 428.8 112.2 423.9L224 379.2V472H184C170.7 472 160 482.7 160 496C160 509.3 170.7 520 184 520H328C341.3 520 352 509.3 352 496C352 482.7 341.3 472 328 472H288V379.2L399.8 423.9C412 428.8 426.1 425.5 434.1 415.8C443.9 406.1 445.5 392 439.3 380.6zM256 103.1C274.2 77.28 303.8 59.98 334.1 51.85C347 48.38 354.7 35.07 351.3 22.14C347.8 9.206 334.5 1.529 321.6 4.995C283.5 15.22 246.9 36.62 224 68.52C201.1 36.62 164.5 15.22 126.4 4.995C113.5 1.529 100.2 9.206 96.7 22.14C93.23 35.07 100.1 48.38 113.9 51.85C144.2 59.98 173.8 77.28 192 103.1V132.5L256 158.1L320 132.5V103.1H256z" style="fill:url(#goldGradientDef);"/></svg>
+                    <div class="card-label">Yılbaşı<br>Kartı</div>
+                    <div class="click-hint">GİZEMİ ÇÖZ</div>
+                </div>
+                <div class="face back">
+                    <div class="wish-title">Bereket</div>
+                    <div class="wish-text">"Emeklerinin altına dönüşeceği, cüzdanının dolup taşacağı, çok verimli bir yıl olsun."</div>
+                    <div class="gift-icon">⚜️</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="face front green-theme">
+                    <svg class="tree-icon" viewBox="0 0 512 512"><path d="M439.3 380.6C428 359.6 412.8 340.4 394.4 323.6L417.9 293.2C425.1 283.9 426.4 271.3 421.3 260.8C416.1 250.2 405.6 243.6 393.9 243.6H312.4L349.2 175.8C355.4 164.4 353.8 150.3 344.9 140.6C336.1 130.9 322 127.6 309.8 132.5L256 154L202.2 132.5C190 127.6 175.9 130.9 167.1 140.6C158.2 150.3 156.6 164.4 162.8 175.8L199.6 243.6H118.1C106.4 243.6 95.89 250.2 90.74 260.8C85.59 271.3 86.94 283.9 94.11 293.2L117.6 323.6C99.2 340.4 83.97 359.6 72.67 380.6C66.51 392 68.12 406.1 77.03 415.8C85.93 425.5 100 428.8 112.2 423.9L224 379.2V472H184C170.7 472 160 482.7 160 496C160 509.3 170.7 520 184 520H328C341.3 520 352 509.3 352 496C352 482.7 341.3 472 328 472H288V379.2L399.8 423.9C412 428.8 426.1 425.5 434.1 415.8C443.9 406.1 445.5 392 439.3 380.6zM256 103.1C274.2 77.28 303.8 59.98 334.1 51.85C347 48.38 354.7 35.07 351.3 22.14C347.8 9.206 334.5 1.529 321.6 4.995C283.5 15.22 246.9 36.62 224 68.52C201.1 36.62 164.5 15.22 126.4 4.995C113.5 1.529 100.2 9.206 96.7 22.14C93.23 35.07 100.1 48.38 113.9 51.85C144.2 59.98 173.8 77.28 192 103.1V132.5L256 158.1L320 132.5V103.1H256z" style="fill:url(#goldGradientDef);"/></svg>
+                    <div class="card-label">Yılbaşı<br>Kartı</div>
+                    <div class="click-hint">GİZEMİ ÇÖZ</div>
+                </div>
+                <div class="face back">
+                    <div class="wish-title">Aşk</div>
+                    <div class="wish-text">"Kalbinin ritmini değiştirecek, yüzünü güldürecek o gerçek sevgi daima seninle olsun."</div>
+                    <div class="gift-icon">❤️</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="face front">
+                    <svg class="tree-icon" viewBox="0 0 512 512"><path d="M439.3 380.6C428 359.6 412.8 340.4 394.4 323.6L417.9 293.2C425.1 283.9 426.4 271.3 421.3 260.8C416.1 250.2 405.6 243.6 393.9 243.6H312.4L349.2 175.8C355.4 164.4 353.8 150.3 344.9 140.6C336.1 130.9 322 127.6 309.8 132.5L256 154L202.2 132.5C190 127.6 175.9 130.9 167.1 140.6C158.2 150.3 156.6 164.4 162.8 175.8L199.6 243.6H118.1C106.4 243.6 95.89 250.2 90.74 260.8C85.59 271.3 86.94 283.9 94.11 293.2L117.6 323.6C99.2 340.4 83.97 359.6 72.67 380.6C66.51 392 68.12 406.1 77.03 415.8C85.93 425.5 100 428.8 112.2 423.9L224 379.2V472H184C170.7 472 160 482.7 160 496C160 509.3 170.7 520 184 520H328C341.3 520 352 509.3 352 496C352 482.7 341.3 472 328 472H288V379.2L399.8 423.9C412 428.8 426.1 425.5 434.1 415.8C443.9 406.1 445.5 392 439.3 380.6zM256 103.1C274.2 77.28 303.8 59.98 334.1 51.85C347 48.38 354.7 35.07 351.3 22.14C347.8 9.206 334.5 1.529 321.6 4.995C283.5 15.22 246.9 36.62 224 68.52C201.1 36.62 164.5 15.22 126.4 4.995C113.5 1.529 100.2 9.206 96.7 22.14C93.23 35.07 100.1 48.38 113.9 51.85C144.2 59.98 173.8 77.28 192 103.1V132.5L256 158.1L320 132.5V103.1H256z" style="fill:url(#goldGradientDef);"/></svg>
+                    <div class="card-label">Yılbaşı<br>Kartı</div>
+                    <div class="click-hint">GİZEMİ ÇÖZ</div>
+                </div>
+                <div class="face back">
+                    <div class="wish-title">Seyahat</div>
+                    <div class="wish-text">"Ufkun genişlesin, yolların açık olsun. Dünyanın güzelliklerini keşfedeceğin bir yıl!"</div>
+                    <div class="gift-icon">🧭</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="face front green-theme">
+                    <svg class="tree-icon" viewBox="0 0 512 512"><path d="M439.3 380.6C428 359.6 412.8 340.4 394.4 323.6L417.9 293.2C425.1 283.9 426.4 271.3 421.3 260.8C416.1 250.2 405.6 243.6 393.9 243.6H312.4L349.2 175.8C355.4 164.4 353.8 150.3 344.9 140.6C336.1 130.9 322 127.6 309.8 132.5L256 154L202.2 132.5C190 127.6 175.9 130.9 167.1 140.6C158.2 150.3 156.6 164.4 162.8 175.8L199.6 243.6H118.1C106.4 243.6 95.89 250.2 90.74 260.8C85.59 271.3 86.94 283.9 94.11 293.2L117.6 323.6C99.2 340.4 83.97 359.6 72.67 380.6C66.51 392 68.12 406.1 77.03 415.8C85.93 425.5 100 428.8 112.2 423.9L224 379.2V472H184C170.7 472 160 482.7 160 496C160 509.3 170.7 520 184 520H328C341.3 520 352 509.3 352 496C352 482.7 341.3 472 328 472H288V379.2L399.8 423.9C412 428.8 426.1 425.5 434.1 415.8C443.9 406.1 445.5 392 439.3 380.6zM256 103.1C274.2 77.28 303.8 59.98 334.1 51.85C347 48.38 354.7 35.07 351.3 22.14C347.8 9.206 334.5 1.529 321.6 4.995C283.5 15.22 246.9 36.62 224 68.52C201.1 36.62 164.5 15.22 126.4 4.995C113.5 1.529 100.2 9.206 96.7 22.14C93.23 35.07 100.1 48.38 113.9 51.85C144.2 59.98 173.8 77.28 192 103.1V132.5L256 158.1L320 132.5V103.1H256z" style="fill:url(#goldGradientDef);"/></svg>
+                    <div class="card-label">Yılbaşı<br>Kartı</div>
+                    <div class="click-hint">GİZEMİ ÇÖZ</div>
+                </div>
+                <div class="face back">
+                    <div class="wish-title">Mutluluk</div>
+                    <div class="wish-text">"Küçük şeylerden büyük neşeler çıkaracağın, kahkahanın eksik olmadığı bir yıl."</div>
+                    <div class="gift-icon">✨</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="face front">
+                    <svg class="tree-icon" viewBox="0 0 512 512"><path d="M439.3 380.6C428 359.6 412.8 340.4 394.4 323.6L417.9 293.2C425.1 283.9 426.4 271.3 421.3 260.8C416.1 250.2 405.6 243.6 393.9 243.6H312.4L349.2 175.8C355.4 164.4 353.8 150.3 344.9 140.6C336.1 130.9 322 127.6 309.8 132.5L256 154L202.2 132.5C190 127.6 175.9 130.9 167.1 140.6C158.2 150.3 156.6 164.4 162.8 175.8L199.6 243.6H118.1C106.4 243.6 95.89 250.2 90.74 260.8C85.59 271.3 86.94 283.9 94.11 293.2L117.6 323.6C99.2 340.4 83.97 359.6 72.67 380.6C66.51 392 68.12 406.1 77.03 415.8C85.93 425.5 100 428.8 112.2 423.9L224 379.2V472H184C170.7 472 160 482.7 160 496C160 509.3 170.7 520 184 520H328C341.3 520 352 509.3 352 496C352 482.7 341.3 472 328 472H288V379.2L399.8 423.9C412 428.8 426.1 425.5 434.1 415.8C443.9 406.1 445.5 392 439.3 380.6zM256 103.1C274.2 77.28 303.8 59.98 334.1 51.85C347 48.38 354.7 35.07 351.3 22.14C347.8 9.206 334.5 1.529 321.6 4.995C283.5 15.22 246.9 36.62 224 68.52C201.1 36.62 164.5 15.22 126.4 4.995C113.5 1.529 100.2 9.206 96.7 22.14C93.23 35.07 100.1 48.38 113.9 51.85C144.2 59.98 173.8 77.28 192 103.1V132.5L256 158.1L320 132.5V103.1H256z" style="fill:url(#goldGradientDef);"/></svg>
+                    <div class="card-label">Yılbaşı<br>Kartı</div>
+                    <div class="click-hint">GİZEMİ ÇÖZ</div>
+                </div>
+                <div class="face back">
+                    <div class="wish-title">Huzur</div>
+                    <div class="wish-text">"Fırtınaların dindiği, içinin dinginleştiği, yastığa başını rahat koyduğun sakin bir yıl."</div>
+                    <div class="gift-icon">🕊️</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="face front green-theme">
+                    <svg class="tree-icon" viewBox="0 0 512 512"><path d="M439.3 380.6C428 359.6 412.8 340.4 394.4 323.6L417.9 293.2C425.1 283.9 426.4 271.3 421.3 260.8C416.1 250.2 405.6 243.6 393.9 243.6H312.4L349.2 175.8C355.4 164.4 353.8 150.3 344.9 140.6C336.1 130.9 322 127.6 309.8 132.5L256 154L202.2 132.5C190 127.6 175.9 130.9 167.1 140.6C158.2 150.3 156.6 164.4 162.8 175.8L199.6 243.6H118.1C106.4 243.6 95.89 250.2 90.74 260.8C85.59 271.3 86.94 283.9 94.11 293.2L117.6 323.6C99.2 340.4 83.97 359.6 72.67 380.6C66.51 392 68.12 406.1 77.03 415.8C85.93 425.5 100 428.8 112.2 423.9L224 379.2V472H184C170.7 472 160 482.7 160 496C160 509.3 170.7 520 184 520H328C341.3 520 352 509.3 352 496C352 482.7 341.3 472 328 472H288V379.2L399.8 423.9C412 428.8 426.1 425.5 434.1 415.8C443.9 406.1 445.5 392 439.3 380.6zM256 103.1C274.2 77.28 303.8 59.98 334.1 51.85C347 48.38 354.7 35.07 351.3 22.14C347.8 9.206 334.5 1.529 321.6 4.995C283.5 15.22 246.9 36.62 224 68.52C201.1 36.62 164.5 15.22 126.4 4.995C113.5 1.529 100.2 9.206 96.7 22.14C93.23 35.07 100.1 48.38 113.9 51.85C144.2 59.98 173.8 77.28 192 103.1V132.5L256 158.1L320 132.5V103.1H256z" style="fill:url(#goldGradientDef);"/></svg>
+                    <div class="card-label">Yılbaşı<br>Kartı</div>
+                    <div class="click-hint">GİZEMİ ÇÖZ</div>
+                </div>
+                <div class="face back">
+                    <div class="wish-title">Başarı</div>
+                    <div class="wish-text">"Potansiyelini keşfettiğin, engelleri aştığın ve zirveye tırmandığın muhteşem bir sene."</div>
+                    <div class="gift-icon">♛</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // JS artık sadece Kar Yağışı için var. Tıklama fonksiyonu CSS hover ile değiştirildiği için kaldırıldı.
+        function createSnow() {
+            const snow = document.createElement('div');
+            snow.innerHTML = '❄';
+            snow.classList.add('snowflake');
+            snow.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 15 + 10; 
+            snow.style.fontSize = size + 'px';
+            const duration = Math.random() * 5 + 3;
+            snow.style.animationDuration = duration + 's';
+            snow.style.opacity = Math.random() * 0.5 + 0.3;
+            document.body.appendChild(snow);
+            setTimeout(() => { snow.remove(); }, duration * 1000);
+        }
+        setInterval(createSnow, 100);
+    </script>
+</body>
+</html>
